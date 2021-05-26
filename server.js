@@ -90,28 +90,30 @@ io.on('connection', socket => {
 
     if(msg.substr(0,3) === '/w '){
       msg = msg.substr(3)
+      
       var ind = msg.indexOf(' ')
       if(ind !== -1){
         var name=msg.substring(0,ind)
         var msg = msg.substring(ind + 1)
         if(users.includes(name)){
           var rUser = getReceiderUser(name);
-          console.log(rUser.username, msg)
+          // console.log(rUser.username, msg)
           
           io.to(rUser.username).emit('whisper', formatMessagePrivate(user.username, rUser.username, msg))
           io.to(user.username).emit('whisper', formatMessagePrivate(user.username, rUser.username, msg))
           // console.log('Whisper!' + name + msg)
         }
         else{
-          console.log("Not valid user")
+          // console.log("Not valid user")
+          io.to(user.username).emit('message', formatMessage(botName, 'Not valid user'))
         }
       }
       else{
-        console.log("error")
+        io.to(user.username).emit('message', formatMessage(botName, 'Error'))
       }
     }
 else{
-  console.log(user.room)
+  // console.log(user.room)
   io.to(user.room).emit('message', formatMessage(user.username, msg));
 }
     

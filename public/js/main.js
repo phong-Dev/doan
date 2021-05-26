@@ -1,6 +1,7 @@
 const chatForm = document.getElementById("chat-form");
 const chatMessages = document.querySelector(".chat-messages");
 const roomName = document.getElementById("room-name");
+const userName = document.getElementById("user-name");
 const userList = document.getElementById("users");
 const selectUser = document.getElementById("select-user");
 const participants = document.getElementById("participants");
@@ -187,6 +188,8 @@ socket.on("roomUsers", ({ room, users }) => {
   outputUsers(users);
 });
 
+outputUserName(username);
+
 // Message from server
 socket.on("message", (message) => {
   console.log(message);
@@ -268,13 +271,17 @@ function outputRoomName(room) {
   roomName.innerText = room;
 }
 
+function outputUserName(username) {
+ userName.innerText = username;
+}
+
 // Add users to DOM
 function outputUsers(users) {
   userList.innerHTML = "";
   var number = 0;
   users.forEach((user) => {
     const li = document.createElement("li");
-    li.innerText = user.username;
+    li.innerHTML = user.username;
     userList.appendChild(li);
     number = number + 1;
   });
