@@ -22,7 +22,7 @@ video {
   display: block;
   flex: 1;
   object-fit: cover;
-  border: 5px solid #000;
+  border: 3px solid #fff;
   max-width: 600px;
 }
 .main {
