@@ -170,6 +170,9 @@ const playShare = () => {
     }
   }).then((stream) => {
     let videoTrack = stream.getVideoTracks()[0];
+    videoTrack.onended= function(){
+      stopScreenShare()
+    }
     let sender = currentPeer.getSenders().find(function(s){
       return s.track.kind == videoTrack.kind;
     });
@@ -178,6 +181,14 @@ const playShare = () => {
     console.log("unable to get display " + error);
   });
 };
+
+function stopScreenShare(){
+  let videoTrack = myVideoStream.getVideoTracks()[0]
+  var sender = currentPeer.getSenders().find(function(s){
+    return s.track.kind == videoTrack.kind
+  })
+  sender.replaceTrack(videoTrack)
+}
 
 // Join chatroom
 socket.emit("joinRoom", { username, room });
