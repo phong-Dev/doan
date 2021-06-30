@@ -13,7 +13,7 @@ const {
   getAllUser,
   getReceiderUser
 } = require('./utils/users');
-
+const listUserConnected = []
 
 const app = express();
 const server = http.createServer(app);
@@ -33,6 +33,7 @@ const low = require('lowdb')
 const FileSync = require('lowdb/adapters/FileSync')
 const adapter = new FileSync('db.json')
 const db = low(adapter)
+
 
 // Set some defaults (required if your JSON file is empty)
 db.defaults({ chats: [] })
@@ -69,13 +70,19 @@ io.on('connection', socket => {
 
   socket.on("video-join-room", (room, userId) => {
     const videoUser = videoUserJoin(userId, room);
+    
+    const userToShare = { userId };
+    listUserConnected.push(userToShare)
     socket.join(videoUser.room);
     socket.to(videoUser.room).broadcast.emit("user-connected", userId);
+
+    // socket.to(videoUser.room).broadcast.emit("share", listUserConnected);
 
     socket.on('disconnect', () => {
       socket.to(videoUser.room).broadcast.emit('user-disconnected', userId);
     });
   });
+
 
   // Listen for chatMessage
   socket.on('chatMessage', msg => {

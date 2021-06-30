@@ -30,7 +30,7 @@ video {
   display: flex;
 }
 .main__left {
-  flex: 0.8;
+  flex: 1;
   display: flex;
   flex-direction: column;
 }

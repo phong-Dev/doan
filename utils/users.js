@@ -48,6 +48,7 @@ function videoUserJoin(userId, room) {
   const videoUser = { userId, room };
 
   videoUsers.push(videoUser);
+  // console.log(videoUsers)
 
   return videoUser;
 }

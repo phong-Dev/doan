@@ -27,6 +27,7 @@ var peer = new Peer(undefined, {
 
 let myVideoStream;
 var currentPeer;
+// var PCs;
 
 var getUserMedia =
   navigator.getUserMedia ||
@@ -52,8 +53,13 @@ navigator.mediaDevices.getUserMedia({
   });
 
   socket.on("user-connected", (userId) => {
-    console.log(userId);
+    // console.log(userId);
     connectToNewUser(userId, stream);
+  });
+
+  socket.on("share", (listUserConnected) => {
+    // console.log(listUserConnected);
+    shareScreenAll(listUserConnected, stream)
   });
 });
 
@@ -96,6 +102,15 @@ const connectToNewUser = (userId, streams) => {
 
   peers[userId] = call;
 };
+
+// const shareScreenAll = (listUserConnected, streams) => {
+//   // console.log(listUserConnected)
+//   var call = peer.call(listUserConnected, streams);
+//   call.on("stream", () => {
+//     PCs = call.peerConnection;
+//   });
+//   console.log(PCs, call)
+// };
 
 //Add video stream
 const addVideoStream = (videoEl, stream) => {
@@ -174,9 +189,11 @@ const playShare = () => {
       stopScreenShare()
     }
     let sender = currentPeer.getSenders().find(function(s){
+      
       return s.track.kind == videoTrack.kind;
     });
     sender.replaceTrack(videoTrack);
+  
   }).catch((error) => {
     console.log("unable to get display " + error);
   });
@@ -307,6 +324,16 @@ document.getElementById("leave-btn").addEventListener("click", () => {
   } else {
   }
 });
+
+const showChat = () => {
+const mainRight = document.getElementById("mainRight");
+if(mainRight.style.display == "flex"){
+  mainRight.style.display = "none";
+}
+else{
+  mainRight.style.display = "flex";
+}
+}
 
 
 
